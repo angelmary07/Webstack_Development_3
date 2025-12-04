@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search | Elite Resident Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+      color: #fff;
+      min-height: 100vh;
+    }
+    header {
+      background: rgba(21,30,65,0.98);
+      color: #ffe066;
+      padding: 20px 0 10px 0;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 3px 32px #23294633;
+      text-align: center;
+    }
+    header h1 { font-family: 'Georgia', serif; font-size: 2.3em; letter-spacing: 2px; }
+    nav ul { list-style: none; padding: 0; margin: 13px 0 0 0;}
+    nav ul li { display: inline-block; margin: 0 9px;}
+    nav ul li a { color: #ffe066; text-decoration: none; font-weight: 600; padding: 7px 16px; border-radius: 12px; transition: background .21s, color .21s;}
+    nav ul li a.active, nav ul li a:hover { background: #ffe066; color: #232946 !important;}
+    .search-box {
+      background: rgba(0,0,0,0.70);
+      padding: 40px 25px 18px 25px;
+      border-radius: 15px;
+      max-width: 600px;
+      margin: 46px auto 36px auto;
+      box-shadow: 0 10px 40px #23294666, 0 2px 14px #ffe06627;
+      text-align: center;
+    }
+    .search-box h2 { color: #ffe066; font-family: 'Georgia', serif; margin-bottom: 19px;}
+    input[type="text"] {
+      padding: 10px;
+      width: 86%;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 18px;
+      background: #faf3ca;
+      color: #232946;
+      font-size:1.08em;
+    }
+    button {
+      background: linear-gradient(90deg,#fff7e1 0%,#ffe066 100%);
+      color: #232946;
+      border: none; border-radius: 7px; cursor: pointer; font-weight:600; font-size:1.07em;
+      box-shadow: 0 2px 8px #ffe06666; padding: 10px 22px; transition: box-shadow .2s, background .18s;
+      margin-left: 8px;
+    }
+    button:hover { background: #ffe066; color: #181e41; box-shadow: 0 6px 20px #ffe06699;}
+    .result-title {
+      color: #ffe066;
+      font-size: 1.1em;
+      font-weight: 600;
+      margin-bottom: 8px;
+      margin-top: 8px;
+    }
+    .gold-box {
+      background: linear-gradient(120deg, #ffe066 80%, #232946 120%);
+      color: #232946;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px #151d2e44, 0 1px 7px #ffe06638;
+      padding: 12px 15px 10px 15px;
+      font-family: 'Georgia';
+      font-size: 1.07em;
+      font-weight: 520;
+      text-align: left;
+      margin-bottom: 13px;
+      border-left: 6px solid #ffe066;
+      display: none;
+    }
+    footer { margin-top:55px;text-align:center;color:#ffe066be;background:rgba(21,30,65,.91);font-size:1.09rem;padding: 18px 0 10px 0;border-radius: 18px 18px 0 0;box-shadow:0 -2px 17px #23294644 inset;}
+    #ajax-error-bar {
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100vw;
+      z-index:9999;
+      padding:10px;
+      background:#e3242b;
+      color:#fff;
+      font-weight:bold;
+      text-align:center;
+      box-shadow:0 2px 14px #a00;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Community System</h1>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="complaints.html">Complaints</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="stats.html">Stats</a></li>
+      <li><a href="community_fees.php">Fee Management</a></li>
+      <li><a href="search.html" class="active">Search</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+  <div class="search-box">
+    <h2>Search Residents & Facilities</h2>
+    <form id="searchForm">
+      <input type="text" placeholder="Enter name, apartment no., contact..." id="query" required>
+      <button type="submit"><i class="fa fa-search"></i> Search</button>
+    </form>
+    <div id="resultBox" class="gold-box"></div>
+  </div>
+</main>
+<footer>
+  <p>&copy; 2025 Community Management System</p>
+</footer>
+<script>
+document.getElementById("searchForm").onsubmit = function(event) {
+    event.preventDefault();
+    var outputDiv = document.getElementById("resultBox");
+    outputDiv.style.display = "block";
+    outputDiv.innerHTML = "Requesting...";
+
+    var query = document.getElementById("query").value.trim();
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.timeout = 4000;
+
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            let msg = "";
+            switch (this.status) {
+                case 200:
+                    msg = "<span class='result-title'>200 OK – Request successful</span><br>Response: " + this.responseText;
+                    break;
+                case 404:
+                    msg = "<span class='result-title'>404 Not Found</span><br>File or endpoint missing";
+                    break;
+                case 500:
+                    msg = "<span class='result-title'>500 Internal Server Error</span><br>Server crashed or has bug";
+                    break;
+                case 403:
+                    msg = "<span class='result-title'>403 Forbidden</span><br>Access denied";
+                    break;
+                case 0:
+                    msg = "<span class='result-title'>0 Error</span><br>Network issue / CORS / Request blocked";
+                    break;
+                default:
+                    msg = "<span class='result-title'>Unknown Error</span><br>Status: " + this.status;
+            }
+            outputDiv.innerHTML = msg;
+        }
+    };
+
+    xhttp.ontimeout = function () {
+        outputDiv.innerHTML = "<span class='result-title'>⛔ Timeout Error</span><br>Server took too long to respond!";
+    };
+
+    xhttp.onerror = function () {
+        outputDiv.innerHTML = "<span class='result-title'>⛔ Network Error</span><br>Request failed!";
+    };
+
+    // url points to your real PHP search handler
+    let url = "search.php?query=" + encodeURIComponent(query);
+    xhttp.open("GET", url, true);
+    xhttp.send();
+};
+</script>
+</body>
+</html>

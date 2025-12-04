@@ -1,0 +1,176 @@
+body {
+margin: 0;
+font-family: 'Poppins', 'Georgia', serif;
+background: linear-gradient(135deg, #f5e3c2 0%, #ffe4ad 100%);
+min-height: 100vh;
+overflow-y: auto;
+}
+
+.navbar {
+background: #fcf3deef;
+border-bottom: 2px solid #ffd47e32;
+}
+
+.navbar-brand {
+color: #e3881d !important;
+font-size: 2em;
+font-family: 'Georgia';
+}
+
+.nav-link {
+color: #6f412d !important;
+font-size:1.10em;
+}
+
+.nav-link.active, .nav-link:hover {
+color: #e3881d !important;
+}
+
+.hero {
+background: linear-gradient(120deg,rgba(250,211,145,.72),rgba(245,180,109,0.81)),url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+min-height: 510px;
+color: #e3881d;
+display: flex;
+align-items: center;
+justify-content: center;
+padding-top: 60px;
+padding-bottom: 60px;
+text-align: center;
+flex-direction: column;
+position: relative;
+}
+
+.hero h1 {
+font-family: 'Georgia', serif;
+font-size: 2.7em;
+font-weight: 800;
+margin-bottom: 18px;
+letter-spacing: 1.5px;
+text-shadow: 0 3px 28px #c98c416b;
+}
+
+.hero p {
+font-size: 1.33em;
+font-weight: 500;
+color: #5b412b;
+max-width: 600px;
+margin: 0 auto 31px auto;
+text-shadow: 0 1px 8px #f7deb93a;
+}
+
+.cta-btn {
+background: linear-gradient(90deg,#ffeacb 0%,#ffd47e 100%);
+color: #6f412d;
+font-weight: 700;
+border: none;
+border-radius: 2em;
+font-size: 1.2em;
+padding: .73em 2.7em;
+box-shadow: 0 2px 15px #ffd47e43, 0 4px 14px #f9ba6525;
+margin: 8px 0 0 0;
+transition: background .21s, box-shadow .22s;
+text-decoration:none
+}
+
+.cta-btn:hover {
+background: linear-gradient(90deg, #ffd47e 0%, #fffdea 100%);
+color:#c99843;
+box-shadow: 0 2px 27px #ffc27099;
+}
+
+.features-section {
+background: #fbe9cf;
+padding: 54px 0 34px 0;
+text-align: center;
+color: #a55f17;
+}
+
+.features-section h2 {
+font-family:'Georgia';
+font-size:2.15em;
+font-weight: 700;
+margin-bottom: 20px;
+}
+
+.features-row {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+margin-top: 40px;
+gap: 36px;
+}
+
+.feature-card {
+background: linear-gradient(120deg, #ffd47e 80%, #ffeb7a 120%);
+color: #87602a;
+border-radius: 18px;
+box-shadow: 0 2px 26px #dcbf9963, 0 1px 7px #ffd47e38;
+padding: 31px 23px 27px 23px;
+min-width: 270px;
+max-width: 330px;
+margin: 10px;
+text-align: left;
+transition: transform .22s, box-shadow .22s;
+font-size: 1.07em;
+}
+
+.feature-card:hover {
+transform: scale(1.045);
+box-shadow: 0 9px 25px #ffd47ebb;
+}
+
+.feature-icon {
+font-size: 2.1em;
+color: #bca006;
+margin-bottom:12px;
+}
+
+.testimonial-section {
+background: #e3881d;
+color: #fffde3;
+padding: 52px 0 42px 0;
+}
+
+.testimonial-quote {
+font-size: 1.18em;
+font-style: italic;
+max-width: 660px;
+margin: 0 auto 19px auto;
+opacity: .88;
+}
+
+.testimonial-author {
+color: #fffadf;
+font-weight: 650;
+font-size: 1.05em;
+letter-spacing:.7px;
+}
+
+footer {
+margin-top:0px;
+background: linear-gradient(90deg,#fcf3de 65%,#ffd47e18 100%);
+color: #e3881dbe;
+font-size: 1.09rem;
+padding: 22px 0 13px 0;
+border-top: 2.4px solid #ffd47e33;
+box-shadow: 0 2px 28px #e3881d36 inset;
+text-align:center;
+}
+
+.footer-glow {
+height: 7px;
+width: 80%;
+margin: 0 auto 9px auto;
+background: linear-gradient(90deg,#ffd47e22 0%,#d6bc6e 70%,#ffd47e22 100%);
+border-radius: 12px;
+box-shadow: 0 2px 22px #ffd47e55;
+opacity: .6;
+}
+
+@media (max-width: 900px) {
+.features-row {
+flex-direction:column;
+align-items:center;
+gap: 26px;
+}
+}

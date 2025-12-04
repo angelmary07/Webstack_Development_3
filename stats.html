@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+function ajaxWithStatus(url, options = {}, onSuccess = null) {
+if ($("#ajax-error-bar").length === 0) {
+$("body").prepend('<div id="ajax-error-bar" style="display:none;position:fixed;top:0;left:0;width:100vw;z-index:9999;padding:10px;background:#e3242b;color:#fff;font-weight:bold;text-align:center;box-shadow:0 2px 14px #a00;"></div>');
+}
+function showError(msg) {
+$("#ajax-error-bar").show().text(msg);
+setTimeout(()=>$("#ajax-error-bar").fadeOut(), 4000);
+}
+$.ajax({
+url: url,
+method: options.method || "GET",
+data: options.data || null,
+timeout: 6000,
+dataType: options.dataType || "json",
+success: function(data, textStatus, jqXHR) {
+if (jqXHR.status === 200 && onSuccess) onSuccess(data);
+},
+error: function(jqXHR, textStatus, errorThrown) {
+if (textStatus === "timeout") {
+showError("Request timed out. Please try again.");
+} else if (jqXHR.status === 0) {
+showError("Network error. Please check your connection.");
+} else if (jqXHR.status === 400) {
+showError("Bad request (400): Please verify your input.");
+} else if (jqXHR.status === 401 || jqXHR.status === 403) {
+showError("Access denied (401/403): You are not authorized.");
+} else if (jqXHR.status === 404) {
+showError("Resource not found (404).");
+} else if (jqXHR.status === 500) {
+showError("Server error (500): Please try again later.");
+} else {
+showError("Unexpected error: " + jqXHR.status + " " + errorThrown);
+}
+}
+});
+}
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community System - Stats</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body {
+background: linear-gradient(120deg,#fbe9cf 0%,#ffd47e 100%);
+color: #432a1b;
+min-height:100vh;
+font-family: 'Poppins', Georgia, serif;
+margin: 0;
+padding: 0;
+}
+.page-box {
+background: #fffbe6;
+padding: 38px 54px 30px 54px;
+border-radius: 22px;
+max-width: 660px;
+margin: 52px auto 40px auto;
+box-shadow: 0 10px 44px #ffd47e44, 0 2px 17px #ffe06621;
+}
+label {
+color: #a55f17;
+font-weight:700;
+margin-top: 17px;
+margin-bottom: 8px;
+font-size:1.1em;
+font-family:'Poppins',Georgia,serif;
+display:block;
+}
+input[type=number] {
+padding: 16px 24px;
+margin: 5px 0 8px 0;
+width: 100%;
+border-radius: 2.2em;
+border: 1.6px solid #ffd47e;
+background: #ffefde;
+color: #87602a;
+font-size: 1.18em;
+box-shadow: 0 2px 16px #ffd47e22 inset;
+outline: none;
+transition:border .19s;
+}
+input[type=number]:focus {
+border-color:#e3881d;
+}
+button {
+margin-top: 13px;
+padding: 1em 0;
+width:100%;
+background: linear-gradient(90deg,#ffeacb 0%,#ffd47e 100%);
+color: #6f412d;
+border: none;
+border-radius: 2em;
+cursor: pointer;
+font-weight:700;
+font-size:1.18em;
+box-shadow: 0 2px 18px #ffd47e77, 0 4px 18px #f9ba6525;
+transition: box-shadow .2s, background .18s;
+}
+button:hover {
+background: linear-gradient(90deg,#ffd47e 0%,#fffbea 100%);
+color:#c99843;
+box-shadow: 0 2px 26px #ffd47ebb;
+}
+#statsBoxesRow {
+margin-top: 28px;
+margin-bottom: 7px;
+display: flex;
+flex-wrap: wrap;
+gap: 18px;
+}
+.stat-box {
+min-width: 150px;
+flex: 1 1 150px;
+background: linear-gradient(120deg, #ffe066 80%, #fbe9cf 120%);
+color: #232946;
+border-radius: 13px;
+box-shadow: 0 2px 16px #c8a94144, 0 1px 7px #ffe06638;
+padding: 17px 15px 13px 19px;
+font-family: 'Georgia';
+font-size: 1.13em;
+text-align: left;
+font-weight: 650;
+letter-spacing: .03em;
+margin-bottom:3px;
+border-left: 6px solid #ffd47e;
+}
+.stat-title { font-size:0.97em;font-weight:700;line-height:1.1em;}
+.stat-value { font-size:1.18em;font-weight:700;margin-top:5px; }
+.stats-rate-section {
+margin-top:32px;
+padding-top:22px;
+border-top:2px solid #ffd47e44;
+text-align:center;
+}
+h2, h3 {
+color: #e3881d;
+font-family: 'Georgia',serif;
+font-size:1.45em;
+margin-bottom:14px;
+letter-spacing:1px;
+font-weight:800;
+}
+#stars-row {
+margin:40px auto 15px auto;
+justify-content:center;
+display:flex;
+gap:20px;
+}
+.starButton {
+font-size:70px;
+color: #ffd700;
+cursor: pointer;
+filter: drop-shadow(0 2px 8px #ffd70099);
+transition: transform .12s cubic-bezier(.84,1.62,.67,.9), text-shadow .15s, color .18s;
+}
+.starButton.selectedStar {
+color: #ffe066;
+transform: scale(1.16) rotate(-9deg);
+text-shadow: 0 8px 22px #ffd70077;
+filter: drop-shadow(0 4px 10px #ffd700bb);
+}
+.starButton:hover {
+color: #fffbe5;
+transform: scale(1.22) rotate(3deg);
+text-shadow: 0 12px 42px #ffd47e88, 0 2px 8px #ffd700bf;
+filter: drop-shadow(0 6px 22px #ffe066cc);
+}
+#ratingText {
+margin-top:18px;
+color: #e3881d;
+font-weight: 700;
+font-size: 1.22em;
+letter-spacing:.5px;
+}
+@media (max-width:800px){
+.page-box {padding:18px 2vw 13px 2vw;}
+#stars-row {gap:6px;}
+.starButton {font-size:45px;}
+}
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+<div class="container">
+<a class="navbar-brand" href="index.html"><i class="fas fa-building"></i> Elite Resident Portal</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+<span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+<ul class="navbar-nav">
+<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+<li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+<li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+<li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+<li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+<li class="nav-item"><a class="nav-link" href="complaints.html">Complaints</a></li>
+<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+<li class="nav-item"><a class="nav-link active" href="stats.html">Rating Statistics</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="page-box">
+<h2>Interactive Community Stats</h2>
+<p>Enter values below and see the calculations instantly:</p>
+<label>Total Residents:</label>
+<input type="number" id="residents" placeholder="Enter number of residents">
+<label>Total Workers:</label>
+<input type="number" id="workers" placeholder="Enter number of workers">
+<label>Total Complaints:</label>
+<input type="number" id="complaints" placeholder="Enter total complaints">
+<label>Resolved Complaints:</label>
+<input type="number" id="resolvedComplaints" placeholder="Enter resolved complaints">
+<button onclick="calculateStats()">Show Stats</button>
+<button onclick="greetUser()">Click Me!</button>
+<div id="statsBoxesRow"></div>
+<div class="stats-rate-section">
+<h3>Rate Our Community</h3>
+<div id="stars-row">
+<span class="starButton" onclick="rate(1)"><i class="fas fa-star"></i></span>
+<span class="starButton" onclick="rate(2)"><i class="fas fa-star"></i></span>
+<span class="starButton" onclick="rate(3)"><i class="fas fa-star"></i></span>
+<span class="starButton" onclick="rate(4)"><i class="fas fa-star"></i></span>
+<span class="starButton" onclick="rate(5)"><i class="fas fa-star"></i></span>
+</div>
+<div id="ratingText"></div>
+</div>
+</section>
+<footer>
+<div class="footer-glow"></div>
+<span style="color:#e3881d;"><i class="fas fa-gem"></i></span>
+&nbsp;&copy; 2025 Elite Resident Community &mdash; All Rights Reserved.
+</footer>
+<script>
+function calculateStats() {
+let residents = parseInt(document.getElementById("residents").value) || 0;
+let workers = parseInt(document.getElementById("workers").value) || 0;
+let complaints = parseInt(document.getElementById("complaints").value) || 0;
+let resolvedComplaints = parseInt(document.getElementById("resolvedComplaints").value) || 0;
+let totalPeople = residents + workers;
+let pendingComplaints = complaints - resolvedComplaints;
+let avgComplaintsPerResident = residents > 0 ? (complaints / residents) : 0;
+let extraStaffNeeded = (pendingComplaints > workers) ? "Yes" : "No";
+let doubleWorkers = workers * 2;
+const stats = [
+{title: "Total Residents", value: residents},
+{title: "Total Workers", value: workers},
+{title: "Total People", value: totalPeople},
+{title: "Total Complaints", value: complaints},
+{title: "Resolved Complaints", value: resolvedComplaints},
+{title: "Pending Complaints", value: pendingComplaints},
+{title: "Avg Complaints per Resident", value: avgComplaintsPerResident.toFixed(2)},
+{title: "Need Extra Staff?", value: extraStaffNeeded},
+{title: "If Workers Doubled", value: doubleWorkers}
+];
+let html = stats.map(s=>`
+<div class="stat-box">
+<div class="stat-title">${s.title}</div>
+<div class="stat-value">${s.value}</div>
+</div>
+`).join('');
+document.getElementById("statsBoxesRow").innerHTML = html;
+}
+function greetUser() {
+alert("Hello! Welcome to our Community ");
+}
+function rate(stars) {
+var all = document.querySelectorAll("#stars-row .starButton");
+all.forEach((span, i) => {
+if (i < stars) span.classList.add("selectedStar");
+else span.classList.remove("selectedStar");
+});
+document.getElementById("ratingText").innerText = "You rated " + stars + " stars! 🌟";
+}
+const starSpans=document.querySelectorAll("#stars-row .starButton");
+starSpans.forEach((span, idx)=>{
+span.onmouseover=()=>{
+starSpans.forEach((s,i)=>{
+if (i <= idx) {
+s.classList.add("selectedStar");
+} else {
+s.classList.remove("selectedStar");
+}
+});
+};
+span.onmouseout=()=>{
+starSpans.forEach(s=>{ s.classList.remove("selectedStar"); });
+};
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
