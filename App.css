@@ -1,3 +1,6 @@
+/* src/App.css */
+@import url('https://fonts.googleapis.com/css2?family=Georgia&family=Poppins:wght@400;500;600;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -5,96 +8,67 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f7fa;
-  color: #333;
+  font-family: 'Poppins', 'Georgia', serif;
+  background: linear-gradient(120deg, #fbe9cf 0%, #ffd47e 100%);
+  color: #432a1b;
 }
 
-.app-container {
+.app-wrapper {
+  background: inherit;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
-.main-content {
-  flex: 1;
+main {
+  padding: 1.5rem 1rem;
+}
+
+.card, .page-box, .auth-container, .complaint-box, .contact-box {
+  background: #fffbe6 !important;
+  border-radius: 22px !important;
+  box-shadow: 0 10px 44px rgba(255, 212, 126, 0.27), 0 2px 17px rgba(255, 224, 102, 0.13) !important;
+}
+
+/* Make buttons consistent */
+.cta-btn, button[type="submit"] {
+  background: linear-gradient(90deg, #ffeacb 0%, #ffd47e 100%) !important;
+  color: #6f412d !important;
+  border: none !important;
+  border-radius: 2em !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 18px #ffd47e99, 0 4px 18px #f9ba6525 !important;
+  transition: all 0.18s !important;
+}
+
+.cta-btn:hover, button[type="submit"]:hover {
+  background: linear-gradient(90deg, #ffd47e 0%, #fffbea 100%) !important;
+  color: #c99843 !important;
+  box-shadow: 0 2px 26px #ffd47ebb !important;
+  transform: translateY(-2px);
+}
+
+/* Fix star hover/click effect smoothness */
+.starButton {
+  transition: all 0.15s cubic-bezier(0.84, 1.62, 0.67, 0.9);
+}
+/* src/App.css */
+.app-wrapper {
+  background: linear-gradient(120deg, #fbe9cf 0%, #ffd47e 100%);
+  color: #432a1b;
+}
+
+main {
   padding: 2rem 1rem;
+  flex: 1;
+}
+
+.container {
   max-width: 1200px;
   margin: 0 auto;
-  width: 100%;
 }
 
-.card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  padding: 2.5rem;
-  max-width: 420px;
-  margin: 0 auto;
-}
-
-h1, h2 {
-  color: #1a3c6e;
-  margin-bottom: 1.5rem;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-input, button {
-  padding: 0.9rem 1.1rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  border: 1px solid #d1d9e6;
-}
-
-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
-}
-
-button {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.2s;
-}
-
-button:hover {
-  background: #2563eb;
-}
-
-.link {
-  color: #3b82f6;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.link:hover {
-  text-decoration: underline;
-}
-
-.error {
-  color: #dc2626;
-  font-size: 0.9rem;
-  margin-top: -0.6rem;
-}
-
-.auth-container {
-  text-align: center;
-  margin-top: 1.5rem;
-}
-
-footer {
-  background: #1a3c6e;
-  color: white;
-  text-align: center;
-  padding: 1.5rem;
-  margin-top: auto;
+/* Make cards consistent */
+.card, .page-box, .auth-container {
+  border-radius: 22px !important;
+  background: #fffbe6 !important;
+  box-shadow: 0 10px 44px rgba(255, 212, 126, 0.27), 0 2px 17px rgba(255, 224, 102, 0.13) !important;
 }
